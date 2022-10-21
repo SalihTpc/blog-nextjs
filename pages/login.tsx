@@ -17,6 +17,8 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import { useRouter } from "next/router";
 import { message } from "antd";
+import { useAppDispatch } from "../store/hooks";
+import { loginAction } from "../store/features/auth/authAction";
 
 function Copyright(props: any) {
   const router = useRouter();
@@ -56,6 +58,7 @@ const style = {
 };
 
 function GoToRegister(props: any) {
+  const dispatch = useAppDispatch();
   const router = useRouter();
   return (
     <Link
@@ -106,12 +109,13 @@ const Login = () => {
   };
   const handleSubmit = async (values: any) => {
     try {
-      await axios
-        .post("https://blogsato-drf.herokuapp.com/users/auth/login/", values)
-        .then(function (response) {
-          // console.log(response.data.key);
-          sessionStorage.setItem("key", response.data.key);
-        });
+      const res = await dispatch(loginAction(values));
+      // await axios
+      //   .post("https://blogsato-drf.herokuapp.com/users/auth/login/", values)
+      //   .then(function (response) {
+      //     // console.log(response.data.key);
+      //     sessionStorage.setItem("key", response.data.key);
+      //   });
 
       // console.log(isAuth);
       message.success("Login Successful");
